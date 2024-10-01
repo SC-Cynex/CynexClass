@@ -4,5 +4,9 @@
 turmas, permitindo que alunos se inscrevam nas turmas disponíveis.
 
 ## ✍🏻 Planejamento e Gestão
-- Jira: https://cynexclass.atlassian.net/jira/software/projects/CYN/boards
+- Jira
+
+## 💻 Linguagens & Frameworks
+- Backend: Golang
+- Frontend: React | TypeScript | Ant design
   
