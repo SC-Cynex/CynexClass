@@ -1,9 +1,9 @@
 services:
-  cynextime-service:
+  cynex-class-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: cynextime-service
+    container_name: cynex-class-service
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
