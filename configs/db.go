@@ -5,14 +5,25 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
+var (
+	db   *sql.DB
+	once sync.Once
+)
 
-func InitDB() {
-	var err error
+// Returns a singleton instance
+func GetDB() *sql.DB {
+	once.Do(func() {
+		initDB()
+	})
+	return db
+}
+
+func initDB() {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
@@ -20,14 +31,18 @@ func InitDB() {
 	dbName := os.Getenv("DB_NAME")
 	dbSSLMode := os.Getenv("DB_SSLMODE")
 
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", dbHost, dbPort, dbUser, dbPassword, dbName, dbSSLMode)
-	DB, err = sql.Open("postgres", connStr)
+	connStr := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		dbHost, dbPort, dbUser, dbPassword, dbName, dbSSLMode,
+	)
+
+	var err error
+	db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal("Error connecting to the database: ", err)
 	}
 
-	err = DB.Ping()
-	if err != nil {
+	if err = db.Ping(); err != nil {
 		log.Fatal("Error pinging the database: ", err)
 	}
 
