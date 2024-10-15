@@ -17,6 +17,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 COPY --from=build /app/bin/cynex-class-service /app/cynex-class-service
+COPY --from=build /app/migrations /app/migrations
 
 EXPOSE 8080
 
