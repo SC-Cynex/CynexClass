@@ -31,8 +31,8 @@ func main() {
 
 	r := mux.NewRouter()
 
-	PORT := os.Getenv("APP_PORT")
-	if PORT == "" {
+	r.HandleFunc("/teachers", teacherHandler.CreateTeacher).Methods("POST")
+	r.HandleFunc("/teachers/{id}", teacherHandler.GetTeacher).Methods("GET")
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {
