@@ -21,7 +21,7 @@
 Nesta seção, você encontrará a documentação completa do projeto, incluindo requisitos, casos de uso, arquitetura e outros materiais relevantes.
 
 ### Documentos Disponíveis
-- **[Requisitos Funcionais](link-para-o-documento)**
+- **[Requisitos_CynexClass](https://github.com/user-attachments/files/17424718/Requisitos_CynexClass.pdf)**
 - **[Casos de Uso](link-para-o-documento)**
 - **[Histórias de Usuário](link-para-o-documento)**
 - **[Modelagem UML](link-para-o-documento)**
