@@ -1,16 +1,15 @@
 package main
 
 import (
+	"database/sql"
+	. "github.com/SC-Cynex/cynex-class-service/internal/routes"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/SC-Cynex/cynex-class-service/configs"
-	"github.com/SC-Cynex/cynex-class-service/internal/api/teachers"
-	"github.com/SC-Cynex/cynex-class-service/internal/repository"
-	"github.com/SC-Cynex/cynex-class-service/internal/services"
+	"github.com/SC-Cynex/cynex-class-service/internal/initialization"
 	"github.com/SC-Cynex/cynex-class-service/pkg/migrate"
-	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
@@ -21,18 +20,21 @@ func main() {
 	}
 
 	db := configs.GetDB()
-	defer db.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Println("Error closing db connection")
+		}
+	}(db)
 
 	migrate.RunMigrations()
 
-	teacherRepo := repository.NewTeacherRepository(db)
-	teacherService := services.NewTeacherService(teacherRepo)
-	teacherHandler := teachers.NewHandler(teacherService)
+	dependencies, err := initialization.InitAppDependencies(db)
+	if err != nil {
+		log.Fatalf("Failed to initialize app dependencies: %v", err)
+	}
 
-	r := mux.NewRouter()
-
-	r.HandleFunc("/teachers", teacherHandler.CreateTeacher).Methods("POST")
-	r.HandleFunc("/teachers/{id}", teacherHandler.GetTeacher).Methods("GET")
+	r := NewRouter(dependencies.TeacherHandler)
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {

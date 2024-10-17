@@ -15,7 +15,7 @@ var (
 	once sync.Once
 )
 
-// Returns a singleton instance
+// GetDB Returns a singleton instance
 func GetDB() *sql.DB {
 	once.Do(func() {
 		initDB()
