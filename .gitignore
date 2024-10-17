@@ -28,3 +28,8 @@
 go.work
 
 # End of https://www.toptal.com/developers/gitignore/api/go
+.idea/modules.xml
+
+.idea/cynex-class-service.iml
+
+.idea/vcs.xml
