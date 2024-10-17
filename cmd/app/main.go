@@ -2,13 +2,13 @@ package main
 
 import (
 	"database/sql"
-	. "github.com/SC-Cynex/cynex-class-service/internal/routes"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/SC-Cynex/cynex-class-service/configs"
 	"github.com/SC-Cynex/cynex-class-service/internal/initialization"
+	"github.com/SC-Cynex/cynex-class-service/internal/routes"
 	"github.com/SC-Cynex/cynex-class-service/pkg/migrate"
 	"github.com/joho/godotenv"
 )
@@ -34,7 +34,7 @@ func main() {
 		log.Fatalf("Failed to initialize app dependencies: %v", err)
 	}
 
-	r := NewRouter(dependencies.TeacherHandler)
+	r := routes.NewRouter(dependencies.AuthHandler)
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {
