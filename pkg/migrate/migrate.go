@@ -23,9 +23,7 @@ func RunMigrations() {
 		log.Fatalf("Could not determine absolute path: %v", err)
 	}
 
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://"+migrationDir,
-		"postgres", driver)
+	m, err := migrate.NewWithDatabaseInstance("file://"+migrationDir,"postgres", driver)
 	if err != nil {
 		log.Fatalf("Could not initialize migrations: %v", err)
 	}
