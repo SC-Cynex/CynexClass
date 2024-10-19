@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/SC-Cynex/cynex-class-service/internal/models"
+	"github.com/SC-Cynex/cynex-class-service/internal/dto"
 	"github.com/SC-Cynex/cynex-class-service/internal/services"
+	"github.com/SC-Cynex/cynex-class-service/internal/utils"
+	"github.com/SC-Cynex/cynex-class-service/internal/validators"
 )
 
 type Handler struct {
@@ -18,17 +20,25 @@ func NewHandler(service *services.AuthService) *Handler {
 
 // POST /api/v1/register.
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
+	var userDTO dto.UserRegistrationRequestDTO
+
+	if err := json.NewDecoder(r.Body).Decode(&userDTO); err != nil {
+		utils.SendAPIResponse(w, http.StatusUnprocessableEntity, utils.TitleUnprocessableEntity, false, "Failed to decode request body")
 		return
 	}
 
-	if err := h.Service.CreateUser(&user); err != nil {
-		http.Error(w, "Could not create user", http.StatusInternalServerError)
+	validationErrors := validators.ValidateStruct(userDTO)
+	if validationErrors != nil {
+		utils.SendAPIResponse(w, http.StatusUnprocessableEntity, utils.TitleUnprocessableEntity, false, validationErrors)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
+	/*
+		if err := h.Service.CreateUser(&userDTO); err != nil {
+			utils.SendErrorResponse(w, http.StatusInternalServerError, utils.TitleInternalServerError, "Could not create user")
+			return
+		}
+	*/
+
+	utils.SendAPIResponse(w, http.StatusCreated, utils.TitleCreated, true, userDTO)
 }
