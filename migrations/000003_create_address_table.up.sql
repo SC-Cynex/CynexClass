@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS TBLAddress (
     neighborhood VARCHAR(100) NOT NULL,    -- Neighborhood names are usually short, within 100 characters
     city VARCHAR(100) NOT NULL,            -- City names typically do not exceed 100 characters
     state VARCHAR(2) NOT NULL,             -- State codes use two characters
-    zip_code VARCHAR(8) NOT NULL,          -- Brazilian ZIP codes consist of 8 digits
+    zip_code VARCHAR(8) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
