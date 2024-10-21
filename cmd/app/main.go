@@ -27,6 +27,7 @@ func main() {
 		}
 	}(db)
 
+	// Auto migrate database
 	migrate.RunMigrations()
 
 	dependencies, err := initialization.InitAppDependencies(db)
