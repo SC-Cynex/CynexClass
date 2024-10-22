@@ -10,9 +10,23 @@ import (
 	"github.com/SC-Cynex/cynex-class-service/internal/initialization"
 	"github.com/SC-Cynex/cynex-class-service/internal/routes"
 	"github.com/SC-Cynex/cynex-class-service/pkg/migrate"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+
+	_ "github.com/SC-Cynex/cynex-class-service/docs"
 )
 
+// @title           Cynex Class Service
+// @version         1.0
+// @description     Cynex Class Service API Documentation
+
+// @contact.email  team.cynexsc@gmail.com
+
+// schemes http https
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -35,7 +49,9 @@ func main() {
 		log.Fatalf("Failed to initialize app dependencies: %v", err)
 	}
 
-	r := routes.NewRouter(dependencies.AuthHandler)
+	r := mux.NewRouter()
+
+	routes.RegisterRoutes(r, dependencies)
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {

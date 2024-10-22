@@ -2,6 +2,7 @@ package migrate
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/SC-Cynex/cynex-class-service/configs"
@@ -15,27 +16,46 @@ func RunMigrations() {
 
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
-		log.Fatalf("Could not initialize migration driver: %v", err)
+		log.Fatalf("Não foi possível inicializar o driver de migração: %v", err)
 	}
 
-	migrationDir, err := filepath.Abs("./migrations")
-	if err != nil {
-		log.Fatalf("Could not determine absolute path: %v", err)
+	// Lista de possíveis caminhos para o diretório de migrações
+	possiblePaths := []string{
+		"./migrations",
+		"../migrations",
+		"../../migrations",
+	}
+
+	var migrationDir string
+	for _, path := range possiblePaths {
+		absPath, err := filepath.Abs(path)
+		if err != nil {
+			log.Fatalf("Não foi possível determinar o caminho absoluto: %v", err)
+		}
+
+		if _, err := os.Stat(absPath); !os.IsNotExist(err) {
+			migrationDir = absPath
+			break
+		}
+	}
+
+	if migrationDir == "" {
+		log.Fatalf("Diretório de migrações não encontrado em nenhum dos caminhos possíveis")
 	}
 
 	m, err := migrate.NewWithDatabaseInstance("file://"+migrationDir, "postgres", driver)
 	if err != nil {
-		log.Fatalf("Could not initialize migrations: %v", err)
+		log.Fatalf("Não foi possível inicializar as migrações: %v", err)
 	}
 
 	err = m.Up()
-	if err != nil {
-		if err == migrate.ErrNoChange {
-			log.Println("No migrations to apply.")
-			return
-		}
-		log.Fatalf("Could not run migrations: %v", err)
+	if err != nil && err != migrate.ErrNoChange {
+		log.Fatalf("Não foi possível executar as migrações: %v", err)
 	}
 
-	log.Println("Migrations applied successfully!")
+	if err == migrate.ErrNoChange {
+		log.Println("Nenhuma migração para aplicar.")
+	} else {
+		log.Println("Migrações aplicadas com sucesso!")
+	}
 }

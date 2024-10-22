@@ -7,18 +7,24 @@ import (
 )
 
 type AuthService struct {
-	Repo *repository.AuthRepository
+	AuthRepo       *repository.AuthRepository
+	AddressService *AddressService
 }
 
-func NewAuthService(repo *repository.AuthRepository) *AuthService {
-	return &AuthService{Repo: repo}
+func NewAuthService(authRepo *repository.AuthRepository, addressService *AddressService) *AuthService {
+	return &AuthService{
+		AuthRepo:       authRepo,
+		AddressService: addressService,
+	}
 }
 
 func (s *AuthService) CreateUser(user *dto.UserRegistrationRequestDTO) error {
+	// create the address first
+	//addressId := s.AddressService.CreateAddress(&user.Address)
+	// create the user
 	return nil
-	//return s.Repo.Create(user)
 }
 
 func (s *AuthService) GetUser(id int) (*models.User, error) {
-	return s.Repo.GetByID(id)
+	return s.AuthRepo.GetByID(id)
 }

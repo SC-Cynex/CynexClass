@@ -1,0 +1,293 @@
+definitions:
+  dto.AddressRequestDTO:
+    description: Address data for creating a new address
+    properties:
+      city:
+        description: |-
+          City is the name of the city.
+          It is a required field with a maximum length of 100 characters.
+        example: Joinville
+        maxLength: 100
+        type: string
+      neighborhood:
+        description: |-
+          Neighborhood is the name of the neighborhood.
+          It is a required field with a maximum length of 100 characters.
+        example: Centro
+        maxLength: 100
+        type: string
+      number:
+        description: |-
+          Number is the house or building number.
+          It is a required field with a minimum value of 1.
+        example: 72
+        minimum: 1
+        type: integer
+      state:
+        description: |-
+          State is the two-letter state code.
+          It is a required field with a fixed length of 2 characters.
+        example: SC
+        type: string
+      street:
+        description: |-
+          Street is the name of the street for the address.
+          It is a required field with a maximum length of 100 characters.
+        example: Rua das Flores
+        maxLength: 100
+        type: string
+      zip_code:
+        description: |-
+          ZipCode is the postal code.
+          It is a required field with a fixed length of 8 characters.
+        example: "89201304"
+        type: string
+    required:
+    - city
+    - neighborhood
+    - number
+    - state
+    - street
+    - zip_code
+    type: object
+  dto.AddressResponseDTO:
+    properties:
+      city:
+        description: City is the name of the city.
+        example: Joinville
+        type: string
+      id:
+        description: ID is the unique identifier for the address.
+        example: 1
+        type: integer
+      neighborhood:
+        description: Neighborhood is the name of the neighborhood.
+        example: Centro
+        type: string
+      number:
+        description: Number is the house or building number.
+        example: 72
+        type: integer
+      state:
+        description: State is the two-letter state code.
+        example: SC
+        type: string
+      street:
+        description: Street is the name of the street for the address.
+        example: Rua das Flores
+        type: string
+      zip_code:
+        description: ZipCode is the postal code.
+        example: "89201304"
+        type: string
+    type: object
+  dto.BadRequestResponse:
+    properties:
+      data:
+        example: "null"
+        type: string
+      status:
+        example: 400
+        type: integer
+      success:
+        example: false
+        type: boolean
+      title:
+        example: Bad Request
+        type: string
+    type: object
+  dto.CreatedResponse:
+    properties:
+      data: {}
+      status:
+        example: 201
+        type: integer
+      success:
+        example: true
+        type: boolean
+      title:
+        example: Created
+        type: string
+    type: object
+  dto.InternalServerErrorResponse:
+    properties:
+      data:
+        example: "null"
+        type: string
+      status:
+        example: 500
+        type: integer
+      success:
+        example: false
+        type: boolean
+      title:
+        example: Internal Server Error
+        type: string
+    type: object
+  dto.UnprocessableEntityResponse:
+    properties:
+      data:
+        example: name is required
+        type: string
+      status:
+        example: 422
+        type: integer
+      success:
+        example: false
+        type: boolean
+      title:
+        example: Unprocessable Entity
+        type: string
+    type: object
+  dto.UserRegistrationRequestDTO:
+    properties:
+      address:
+        allOf:
+        - $ref: '#/definitions/dto.AddressRequestDTO'
+        description: Address contains the user's address details.
+      email:
+        description: Email is the user's email address.
+        example: israel@gmail.com
+        type: string
+      password:
+        description: Password is the user's password.
+        example: "123456"
+        minLength: 6
+        type: string
+      role:
+        description: Role defines the user's role in the system.
+        enum:
+        - teacher
+        - student
+        example: student
+        type: string
+      username:
+        description: Username is the unique identifier for the user.
+        example: Israel
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - address
+    - email
+    - password
+    - role
+    - username
+    type: object
+  dto.UserResponseDTO:
+    properties:
+      address:
+        allOf:
+        - $ref: '#/definitions/dto.AddressResponseDTO'
+        description: Address contains the user's address details.
+      email:
+        description: Email is the user's email address.
+        example: israel@gmail.com
+        type: string
+      id:
+        description: ID is the unique identifier for the user.
+        example: 1
+        type: integer
+      role:
+        description: Role defines the user's role in the system.
+        example: student
+        type: string
+      username:
+        description: Username is the unique identifier for the user.
+        example: Israel Schroeder
+        type: string
+    required:
+    - address
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: team.cynexsc@gmail.com
+  description: Cynex Class Service API Documentation
+  title: Cynex Class Service
+  version: "1.0"
+paths:
+  /api/v1/address:
+    post:
+      consumes:
+      - application/json
+      description: Create a new address
+      parameters:
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AddressRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.CreatedResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.AddressResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.UnprocessableEntityResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Create a new address
+      tags:
+      - address
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email and password
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRegistrationRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.CreatedResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.BadRequestResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.UnprocessableEntityResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Register a new user
+      tags:
+      - auth
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

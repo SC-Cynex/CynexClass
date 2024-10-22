@@ -3,26 +3,31 @@ package initialization
 import (
 	"database/sql"
 
-	"github.com/SC-Cynex/cynex-class-service/internal/api/auth"
+	"github.com/SC-Cynex/cynex-class-service/internal/handlers"
 	"github.com/SC-Cynex/cynex-class-service/internal/repository"
 	"github.com/SC-Cynex/cynex-class-service/internal/services"
 )
 
 type AppDependencies struct {
-	AuthHandler *auth.Handler
+	AuthHandler    *handlers.AuthHandler
+	AddressHandler *handlers.Handler
 }
 
 func InitAppDependencies(db *sql.DB) (*AppDependencies, error) {
 	// Repositories
+	addressRepo := repository.NewAddressRepository(db)
 	authRepo := repository.NewAuthRepository(db)
 
 	// Services
-	authService := services.NewAuthService(authRepo)
+	addressService := services.NewAddressService(addressRepo)
+	authService := services.NewAuthService(authRepo, addressService)
 
 	// Handlers
-	authHandler := auth.NewHandler(authService)
+	addressHandler := handlers.NewHandler(addressService)
+	authHandler := handlers.NewAuthHandler(authService)
 
 	return &AppDependencies{
-		AuthHandler: authHandler,
+		AuthHandler:    authHandler,
+		AddressHandler: addressHandler,
 	}, nil
 }
