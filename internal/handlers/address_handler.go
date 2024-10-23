@@ -51,3 +51,22 @@ func (h *Handler) CreateAddress(w http.ResponseWriter, r *http.Request) {
 
 	response.Send(w, response.NewCreatedResponse(addressDTO))
 }
+
+// @Summary Get all addresses
+// @Description Get all addresses
+// @Tags address
+// @Accept  json
+// @Produce  json
+// @Param   address  body  dto.AddressRequestDTO  true  "Address data"
+// @Success 200 {object} dto.SuccessResponse{data=[]dto.AddressResponseDTO} "OK"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal Server Error"
+// @Router /api/v1/address [get]
+func (h *Handler) GetAddresses(w http.ResponseWriter, r *http.Request) {
+	addresses, err := h.Service.GetAddresses()
+	if err != nil {
+		response.Send(w, response.NewInternalServerErrorResponse())
+		return
+	}
+
+	response.Send(w, response.NewSuccessResponse(addresses))
+}

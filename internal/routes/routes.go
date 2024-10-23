@@ -12,6 +12,7 @@ func RegisterRoutes(router *mux.Router, deps *initialization.AppDependencies) {
 
 	// Address Routes
 	router.HandleFunc("/api/v1/address", deps.AddressHandler.CreateAddress).Methods("POST")
+	router.HandleFunc("/api/v1/address", deps.AddressHandler.GetAddresses).Methods("GET")
 
 	// Swagger Routes
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler())

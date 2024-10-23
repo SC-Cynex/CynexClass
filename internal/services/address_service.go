@@ -18,6 +18,15 @@ func (s *AddressService) CreateAddress(address *dto.AddressRequestDTO) error {
 	return s.Repo.Create(address)
 }
 
+func (s *AddressService) GetAddresses() ([]models.Address, error) {
+	addresses, err := s.Repo.GetAddresses()
+	if err != nil {
+		return nil, err
+	}
+
+	return addresses, nil
+}
+
 func (s *AddressService) GetAddress(id int) (*models.Address, error) {
 	return nil, nil
 }
