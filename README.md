@@ -23,7 +23,7 @@ Nesta seção, você encontrará a documentação completa do projeto, incluindo
 ### Documentos Disponíveis
 - **[Requisitos](https://github.com/user-attachments/files/17483385/Requisitos_CynexClass.pdf)**
 - **[Caso_de_Uso](https://github.com/user-attachments/files/17483389/Caso_de_Uso_CynexClass.pdf)**
-- **[Histórias de Usuário](link-para-o-documento)**
+- **[Histórias_de_Usuário](https://github.com/user-attachments/files/17483538/Historias_de_Usuario_CynexClass.pdf)**
 - **[Diagrama UML](https://github.com/user-attachments/assets/fad1beac-c77e-457f-bfb1-320921692374)**
 
 ## 👥 Membros da equipe
