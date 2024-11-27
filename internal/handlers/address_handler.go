@@ -18,17 +18,6 @@ func NewHandler(service *services.AddressService) *Handler {
 	return &Handler{Service: service}
 }
 
-// @Summary Create a new address
-// @Description Create a new address
-// @Tags address
-// @Accept  json
-// @Produce  json
-// @Param   address  body  dto.AddressRequestDTO  true  "Address data"
-// @Success 201 {object} dto.CreatedResponse{data=dto.AddressResponseDTO} "Created"
-// @Failure 400 {object} dto.BadRequestResponse "Bad Request"
-// @Failure 422 {object} dto.UnprocessableEntityResponse "Unprocessable Entity"
-// @Failure 500 {object} dto.InternalServerErrorResponse "Internal Server Error"
-// @Router /api/v1/address [post]
 func (h *Handler) CreateAddress(w http.ResponseWriter, r *http.Request) {
 	var addressDTO dto.AddressRequestDTO
 
@@ -52,15 +41,6 @@ func (h *Handler) CreateAddress(w http.ResponseWriter, r *http.Request) {
 	response.Send(w, response.NewCreatedResponse(addressDTO))
 }
 
-// @Summary Get all addresses
-// @Description Get all addresses
-// @Tags address
-// @Accept  json
-// @Produce  json
-// @Param   address  body  dto.AddressRequestDTO  true  "Address data"
-// @Success 200 {object} dto.SuccessResponse{data=[]dto.AddressResponseDTO} "OK"
-// @Failure 500 {object} dto.InternalServerErrorResponse "Internal Server Error"
-// @Router /api/v1/address [get]
 func (h *Handler) GetAddresses(w http.ResponseWriter, r *http.Request) {
 	addresses, err := h.Service.GetAddresses()
 	if err != nil {

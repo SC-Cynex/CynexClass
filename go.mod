@@ -12,6 +12,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.4
+	github.com/rs/cors v1.8.0
 )
 
 require (
@@ -35,3 +36,5 @@ require (
 	golang.org/x/tools v0.24.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+require github.com/dgrijalva/jwt-go v3.2.0+incompatible

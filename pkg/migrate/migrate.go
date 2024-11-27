@@ -19,7 +19,6 @@ func RunMigrations() {
 		log.Fatalf("Não foi possível inicializar o driver de migração: %v", err)
 	}
 
-	// Lista de possíveis caminhos para o diretório de migrações
 	possiblePaths := []string{
 		"./migrations",
 		"../migrations",
